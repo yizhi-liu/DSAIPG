@@ -1,8 +1,10 @@
 package com.phasmidsoftware.dsaipg.adt.threesum;
 
+import com.phasmidsoftware.dsaipg.util.Stopwatch;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -50,4 +52,82 @@ public class ThreeSumQuadrithmicTest {
         assertEquals(0, result.sum());
         assertEquals(new Triple(-2, -2, 4), result);
     }
+
+
+    @Test
+    public void Benchmark_for_three() {
+        int m = 10; //repeat for m times find average
+        int n = 100; // size of list
+
+        int[] record = new int[m];
+        int[] inputsize = {n, n*2, n*4, n*8, n*16, n*32};
+        final Random random = new Random();
+
+        System.out.println( m + " times of Quadrithmic benchmark: ");
+        for (int j : inputsize) {
+            for( int x = 0 ; x < m; x++){
+                int[] xs = new int[j];
+                for (int i = 0; i < xs.length; i++) xs[i] = random.nextInt();
+                try (Stopwatch target = new Stopwatch()) {
+                    target.lap();
+                    Arrays.sort(xs);
+                    ThreeSumQuadrithmic threeSum = new ThreeSumQuadrithmic(xs);
+
+                    Triple[] result = threeSum.getTriples(); // Assuming a valid triple exists
+                    record[x] = (int)target.lap();
+                }
+            }
+            int sum = 0;
+            for (int num : record) {
+                sum += num;
+            }
+            System.out.print("size: " + j );
+            System.out.println(",  average time: " + sum/m + " milliseconds ");
+        }
+
+        System.out.println( m + " times of Quadratic benchmark: ");
+        for (int j : inputsize) {
+            for( int x = 0 ; x < m; x++){
+                int[] xs = new int[j];
+                for (int i = 0; i < xs.length; i++) xs[i] = random.nextInt();
+                try (Stopwatch target = new Stopwatch()) {
+                    target.lap();
+                    Arrays.sort(xs);
+                    ThreeSumQuadratic threeSum = new ThreeSumQuadratic(xs);
+
+                    Triple[] result = threeSum.getTriples(); // Assuming a valid triple exists
+                    record[x] = (int)target.lap();
+                }
+            }
+            int sum = 0;
+            for (int num : record) {
+                sum += num;
+            }
+            System.out.print("size: " + j );
+            System.out.println(",  average time: " + sum/m + " milliseconds ");
+        }
+
+        System.out.println( m + " times of Cubic benchmark: ");
+        for (int j : inputsize) {
+            for( int x = 0 ; x < m; x++){
+                int[] xs = new int[j];
+                for (int i = 0; i < xs.length; i++) xs[i] = random.nextInt();
+                try (Stopwatch target = new Stopwatch()) {
+                    target.lap();
+                    Arrays.sort(xs);
+                    ThreeSumCubic threeSum = new ThreeSumCubic(xs);
+
+                    Triple[] result = threeSum.getTriples(); // Assuming a valid triple exists
+                    record[x] = (int)target.lap();
+                }
+            }
+            int sum = 0;
+            for (int num : record) {
+                sum += num;
+            }
+            System.out.print("size: " + j );
+            System.out.println(",  average time: " + sum/m + " milliseconds ");
+        }
+    }
+
 }

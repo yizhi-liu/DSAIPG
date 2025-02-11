@@ -10,6 +10,7 @@ import com.phasmidsoftware.dsaipg.util.Config;
 import com.phasmidsoftware.dsaipg.util.Config_Benchmark;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Comparator;
 
 import static com.phasmidsoftware.dsaipg.sort.InstrumentedComparatorHelper.getRunsConfig;
@@ -64,9 +65,13 @@ public class InsertionSortComparator<X> extends SortWithHelper<X> {
      */
     public void sort(X[] xs, int from, int to) {
         final Helper<X> helper = getHelper();
+        // TO BE IMPLEMENTED
+        for (int i=from; i<to; i++) {
+            for (int j = i; j > from && helper.swapStableConditional(xs, j); j--) {
+            }
+        }
+//                helper.swap(xs, j, j-1);
 
-        // TO BE IMPLEMENTED 
-throw new RuntimeException("implementation missing");
     }
 
     public static final String DESCRIPTION = "Insertion sort";

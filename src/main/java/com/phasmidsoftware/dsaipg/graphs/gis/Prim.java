@@ -7,7 +7,7 @@ package com.phasmidsoftware.dsaipg.graphs.gis;
 import com.phasmidsoftware.dsaipg.adt.bqs.Queue;
 import com.phasmidsoftware.dsaipg.adt.bqs.Queue_Elements;
 import com.phasmidsoftware.dsaipg.adt.pq.PQException;
-import com.phasmidsoftware.dsaipg.adt.pq.PriorityQueue;
+import com.phasmidsoftware.dsaipg.adt.pq.PriorityQueue4Ary;
 import com.phasmidsoftware.dsaipg.graphs.undirected.Edge;
 import com.phasmidsoftware.dsaipg.graphs.undirected.EdgeGraph;
 import com.phasmidsoftware.dsaipg.graphs.undirected.Graph_Edges;
@@ -91,15 +91,15 @@ throw new RuntimeException("implementation missing");
 
     // This method is copied from Kruskal.java, needed for creating a priority queue of edges
     // those edges connecting the mst to the fringe vertices
-    private PriorityQueue<Edge<V, X>> createPQ(SizedIterable<Edge<V, X>> edges) {
-        PriorityQueue<Edge<V, X>> result = new PriorityQueue<>(edges.size(), false, Comparator.comparing(Edge::getAttribute), false);
+    private PriorityQueue4Ary<Edge<V, X>> createPQ(SizedIterable<Edge<V, X>> edges) {
+        PriorityQueue4Ary<Edge<V, X>> result = new PriorityQueue4Ary<>(edges.size(), false, Comparator.comparing(Edge::getAttribute), false);
         for (Edge<V, X> e : edges) result.give(e);
         return result;
     }
 
     private final Queue<Edge<V, X>> queue; // edges in the MST
     private Iterable<Edge<V, X>> mst;
-    private final PriorityQueue<Edge<V, X>> pq; // edges with one endpoint in tree
+    private final PriorityQueue4Ary<Edge<V, X>> pq; // edges with one endpoint in tree
     private final boolean[] marked;    // marked[v] = true iff v on tree
     private final EdgeGraph<V, X> graph;
     private final Map<V, Integer> vertexToInteger;

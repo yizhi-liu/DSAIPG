@@ -4,7 +4,7 @@
 package com.phasmidsoftware.dsaipg.util;
 
 import com.phasmidsoftware.dsaipg.adt.pq.PQException;
-import com.phasmidsoftware.dsaipg.adt.pq.PriorityQueue;
+import com.phasmidsoftware.dsaipg.adt.pq.PriorityQueue4Ary;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -59,7 +59,7 @@ public class PQBenchmark {
      */
     // Insert and delete random integer array with floyd methods according to parameter
     private void insertArray(int[] a, final boolean floyd) {
-        PriorityQueue<Integer> pq = new PriorityQueue<Integer>(a.length, true, Comparator.naturalOrder(), floyd);
+        PriorityQueue4Ary<Integer> pq = new PriorityQueue4Ary<Integer>(a.length, true, Comparator.naturalOrder(), floyd);
         final Random random = new Random();
         for (int j : a) {
             pq.give(j);

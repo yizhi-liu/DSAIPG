@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  *
  * @param <K>
  */
-public class PriorityQueue<K> implements Iterable<K> {
+public class PriorityQueue4Ary<K> implements Iterable<K> {
 
     /**
      * @return true if the current size is zero.
@@ -74,6 +74,7 @@ public class PriorityQueue<K> implements Iterable<K> {
     K doTake(Consumer<Integer> f) {
         K result = binHeap[first]; // get the root element (the largest or smallest, according to field max)
         swap(first, m-- + first - 1); // swap the root element with the last element
+
         f.accept(first); // invoke the function f so that it is ordered again
         binHeap[m + first] = null; // prevent loitering
         return result;
@@ -145,7 +146,7 @@ public class PriorityQueue<K> implements Iterable<K> {
      * @param comparator a comparator for the type K
      * @param floyd      true if we use Floyd's trick (aka snake).
      */
-    public PriorityQueue(boolean max, Object[] binHeap, int first, int m, Comparator<K> comparator, boolean floyd) {
+    public PriorityQueue4Ary(boolean max, Object[] binHeap, int first, int m, Comparator<K> comparator, boolean floyd) {
         this.max = max;
         this.first = first;
         this.comparator = comparator;
@@ -164,7 +165,7 @@ public class PriorityQueue<K> implements Iterable<K> {
      * @param comparator a comparator for the type K
      * @param floyd      true if we use Floyd's trick (aka snake).
      */
-    public PriorityQueue(int n, int first, boolean max, Comparator<K> comparator, boolean floyd) {
+    public PriorityQueue4Ary(int n, int first, boolean max, Comparator<K> comparator, boolean floyd) {
         // NOTE that we reserve the first element of the binary heap, so the length must be n+1, not n
         this(max, new Object[n + first], first, 0, comparator, floyd);
     }
@@ -178,7 +179,7 @@ public class PriorityQueue<K> implements Iterable<K> {
      * @param comparator a comparator for the type K to define the priority order.
      * @param floyd      if true, Floyd's heap construction algorithm will be used.
      */
-    public PriorityQueue(int n, boolean max, Comparator<K> comparator, boolean floyd) {
+    public PriorityQueue4Ary(int n, boolean max, Comparator<K> comparator, boolean floyd) {
         // NOTE that we reserve the first element of the binary heap, so the length must be n+1, not n
         this(n, 1, max, comparator, floyd);
     }
@@ -191,7 +192,7 @@ public class PriorityQueue<K> implements Iterable<K> {
      * @param max        whether or not this is a Maximum Priority Queue as opposed to a Minimum PQ.
      * @param comparator a comparator for the type K
      */
-    public PriorityQueue(int n, boolean max, Comparator<K> comparator) {
+    public PriorityQueue4Ary(int n, boolean max, Comparator<K> comparator) {
         // NOTE that we reserve the first element of the binary heap, so the length must be n+1, not n
         this(n, max, comparator, false);
     }
@@ -203,7 +204,7 @@ public class PriorityQueue<K> implements Iterable<K> {
      * @param n          the desired maximum capacity.
      * @param comparator a comparator for the type K
      */
-    public PriorityQueue(int n, Comparator<K> comparator) {
+    public PriorityQueue4Ary(int n, Comparator<K> comparator) {
         this(n, 0, true, comparator, true);
     }
 
@@ -216,7 +217,7 @@ public class PriorityQueue<K> implements Iterable<K> {
      * @param ks         a Collection of K elements.
      * @param comparator a comparator for the type K
      */
-    public PriorityQueue(Collection<K> ks, Comparator<K> comparator) {
+    public PriorityQueue4Ary(Collection<K> ks, Comparator<K> comparator) {
         this(ks.size(), comparator);
         int i = 0;
         for (K k : ks) binHeap[i++] = k;
@@ -242,11 +243,21 @@ public class PriorityQueue<K> implements Iterable<K> {
         while (true) {
             int firstChild = firstChild(i);
             if (!(firstChild <= m + first - 1)) break;
-            int j = firstChild;
-            if (j < m + first - 1 && inverted(j, j + 1)) j++;
-            if (p.test(i, j)) break;
-            swap(i, j);
-            i = j;
+            int max = firstChild;
+
+            if(firstChild < m + first - 1 && inverted(max, firstChild + 1)){
+                max = firstChild + 1;
+            }
+            if(firstChild +1 < m + first - 1 && inverted(max, firstChild + 2)){
+                max = firstChild + 2;
+            }
+            if(firstChild +2< m + first - 1 && inverted(max, firstChild + 3)){
+                max = firstChild + 3;
+            }
+
+            if (p.test(i, max)) break;
+            swap(i, max);
+            i = max;
         }
         return i;
     }
@@ -277,7 +288,7 @@ public class PriorityQueue<K> implements Iterable<K> {
      * Get the index of the parent of the element at index k
      */
     private int parent(int k) {
-        return (k + 1 - first) / 2 + first - 1;
+        return (k - first) / 4 + first ;
     }
 
     /**
@@ -285,7 +296,7 @@ public class PriorityQueue<K> implements Iterable<K> {
      * The index of the second child will be one greater than the result.
      */
     private int firstChild(int k) {
-        return (k + 1 - first) * 2 + first - 1;
+        return (k  - first) * 4 + first + 1;
     }
 
     /**

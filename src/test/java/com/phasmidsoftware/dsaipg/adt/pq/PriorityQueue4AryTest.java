@@ -10,7 +10,7 @@ import static java.util.Collections.shuffle;
 import static org.junit.Assert.*;
 
 @SuppressWarnings("ConstantConditions")
-public class PriorityQueueTest {
+public class PriorityQueue4AryTest {
 
     @Test
     public void testInverted1a() {
@@ -18,7 +18,7 @@ public class PriorityQueueTest {
         binHeap[1] = "A";
         binHeap[2] = "B";
         boolean max = false;
-        Iterable<String> pq = new PriorityQueue<>(max, binHeap, 1, 2, Comparator.comparing(String::toString), false);
+        Iterable<String> pq = new PriorityQueue4Ary<>(max, binHeap, 1, 2, Comparator.comparing(String::toString), false);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
         assertEquals(max, tester.invokePrivate("inverted", 1, 2));
     }
@@ -29,7 +29,7 @@ public class PriorityQueueTest {
         binHeap[0] = "A";
         binHeap[1] = "B";
         boolean max = false;
-        Iterable<String> pq = new PriorityQueue<>(max, binHeap, 0, 2, Comparator.comparing(String::toString), false);
+        Iterable<String> pq = new PriorityQueue4Ary<>(max, binHeap, 0, 2, Comparator.comparing(String::toString), false);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
         assertEquals(max, tester.invokePrivate("inverted", 0, 1));
     }
@@ -40,7 +40,7 @@ public class PriorityQueueTest {
         binHeap[1] = "A";
         binHeap[2] = "B";
         boolean max = true;
-        Iterable<String> pq = new PriorityQueue<>(max, binHeap, 1, 2, Comparator.comparing(String::toString), false);
+        Iterable<String> pq = new PriorityQueue4Ary<>(max, binHeap, 1, 2, Comparator.comparing(String::toString), false);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
         assertEquals(max, tester.invokePrivate("inverted", 1, 2));
     }
@@ -53,7 +53,7 @@ public class PriorityQueueTest {
         binHeap[0] = a;
         binHeap[1] = b;
         // Create PQ which uses the 0th index.
-        Iterable<String> pq = new PriorityQueue<>(true, binHeap, 0, 2, Comparator.comparing(String::toString), true);
+        Iterable<String> pq = new PriorityQueue4Ary<>(true, binHeap, 0, 2, Comparator.comparing(String::toString), true);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
         assertEquals(a, tester.invokePrivate("peek", 0));
         tester.invokePrivate("swimUp", 1);
@@ -68,7 +68,7 @@ public class PriorityQueueTest {
         binHeap[1] = a;
         binHeap[2] = b;
         // Create PQ which does not use the 0th index.
-        Iterable<String> pq = new PriorityQueue<>(true, binHeap, 1, 2, Comparator.comparing(String::toString), false);
+        Iterable<String> pq = new PriorityQueue4Ary<>(true, binHeap, 1, 2, Comparator.comparing(String::toString), false);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
         assertEquals(a, tester.invokePrivate("peek", 1));
         tester.invokePrivate("swimUp", 2);
@@ -77,30 +77,34 @@ public class PriorityQueueTest {
 
     @Test
     public void testSwimUp2() {
-        String[] binHeap = new String[5];
+        String[] binHeap = new String[7];
         binHeap[1] = "Z";
         binHeap[2] = "A";
         binHeap[3] = "B";
         binHeap[4] = "C";
+        binHeap[5] = "D";
+        binHeap[6] = "E";
         // Create PQ as a max-heap.
-        Iterable<String> pq = new PriorityQueue<>(true, binHeap, 1, 4, Comparator.comparing(String::toString), false);
+        Iterable<String> pq = new PriorityQueue4Ary<>(true, binHeap, 1, 6, Comparator.comparing(String::toString), false);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
-        tester.invokePrivate("swimUp", 4); // Swim "C" upward.
-        assertEquals("C", tester.invokePrivate("peek", 2)); // Peek at root.
+        tester.invokePrivate("swimUp", 6); // Swim "E" upward.
+        assertEquals("E", tester.invokePrivate("peek", 2)); // Peek at root.
     }
 
     @Test
     public void testSwimUp3() {
-        String[] binHeap = new String[5];
+        String[] binHeap = new String[7];
         binHeap[1] = "D";
         binHeap[2] = "C";
         binHeap[3] = "E";
         binHeap[4] = "B";
+        binHeap[5] = "F";
+        binHeap[6] = "A";
         // Create PQ as a min-heap.
-        Iterable<String> pq = new PriorityQueue<>(false, binHeap, 1, 4, Comparator.comparing(String::toString), false);
+        Iterable<String> pq = new PriorityQueue4Ary<>(false, binHeap, 1, 6, Comparator.comparing(String::toString), false);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
-        tester.invokePrivate("swimUp", 4); // Swim "B" upward.
-        assertEquals("B", tester.invokePrivate("peek", 1)); // Peek at root.
+        tester.invokePrivate("swimUp", 6); // Swim "A" upward.
+        assertEquals("A", tester.invokePrivate("peek", 1)); // Peek at root.
     }
 
     @Test
@@ -112,7 +116,7 @@ public class PriorityQueueTest {
         binHeap[0] = b;
         binHeap[1] = c;
         binHeap[2] = a;
-        Iterable<String> pq = new PriorityQueue<>(true, binHeap, 0, 3, Comparator.comparing(String::toString), false);
+        Iterable<String> pq = new PriorityQueue4Ary<>(true, binHeap, 0, 3, Comparator.comparing(String::toString), false);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
         tester.invokePrivate("sink", 0);
         assertEquals(c, tester.invokePrivate("peek", 0));
@@ -128,7 +132,7 @@ public class PriorityQueueTest {
         binHeap[1] = a;
         binHeap[2] = b;
         binHeap[3] = c;
-        Iterable<String> pq = new PriorityQueue<>(true, binHeap, 1, 3, Comparator.comparing(String::toString), false);
+        Iterable<String> pq = new PriorityQueue4Ary<>(true, binHeap, 1, 3, Comparator.comparing(String::toString), false);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
         tester.invokePrivate("sink", 1);
         assertEquals(c, tester.invokePrivate("peek", 1));
@@ -137,23 +141,27 @@ public class PriorityQueueTest {
 
     @Test
     public void testSink1() {
-        String[] binHeap = new String[4];
+        String[] binHeap = new String[6];
         String a = "A";
         String b = "B";
         String c = "C";
+        String d = "D";
+        String e = "E";
         binHeap[1] = a;
         binHeap[2] = b;
         binHeap[3] = c;
-        Iterable<String> pq = new PriorityQueue<>(true, binHeap, 1, 3, Comparator.comparing(String::toString), false);
+        binHeap[4] = d;
+        binHeap[5] = e;
+        Iterable<String> pq = new PriorityQueue4Ary<>(true, binHeap, 1, 5, Comparator.comparing(String::toString), false);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
         tester.invokePrivate("sink", 1);
-        assertEquals(c, tester.invokePrivate("peek", 1));
-        assertEquals(a, tester.invokePrivate("peek", 3));
+        assertEquals(e, tester.invokePrivate("peek", 1));
+        assertEquals(a, tester.invokePrivate("peek", 5));
     }
 
     @Test
     public void testGive1() {
-        PriorityQueue<String> pq = new PriorityQueue<>(10, Comparator.comparing(String::toString));
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(10, Comparator.comparing(String::toString));
         String key = "A";
         pq.give(key);
         assertEquals(1, pq.size());
@@ -164,7 +172,7 @@ public class PriorityQueueTest {
     @Test
     public void testGive2() {
         // Test that we can comfortably give more elements than the the PQ has capacity for
-        PriorityQueue<String> pq = new PriorityQueue<>(1, Comparator.comparing(String::toString));
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(1, Comparator.comparing(String::toString));
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
         String key = "A";
         pq.give(null); // This will never survive so it might as well be null
@@ -177,7 +185,7 @@ public class PriorityQueueTest {
 
     @Test
     public void testTake1() throws PQException {
-        PriorityQueue<String> pq = new PriorityQueue<>(10, Comparator.comparing(String::toString));
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(10, Comparator.comparing(String::toString));
         String key = "A";
         pq.give(key);
         assertEquals(key, pq.take());
@@ -186,7 +194,7 @@ public class PriorityQueueTest {
 
     @Test
     public void testTake2() throws PQException {
-        PriorityQueue<String> pq = new PriorityQueue<>(10, Comparator.comparing(String::toString));
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(10, Comparator.comparing(String::toString));
         String a = "A";
         String b = "B";
         pq.give(a);
@@ -202,7 +210,7 @@ public class PriorityQueueTest {
 
     @Test(expected = PQException.class)
     public void testTake3() throws PQException {
-        PriorityQueue<String> pq = new PriorityQueue<>(10, Comparator.comparing(String::toString));
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(10, Comparator.comparing(String::toString));
         pq.give("A");
         pq.take();
         pq.take();
@@ -210,13 +218,13 @@ public class PriorityQueueTest {
 
     @Test
     public void isEmpty() {
-        PriorityQueue<String> pq = new PriorityQueue<>(10, false, Comparator.comparing(String::toString));
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(10, false, Comparator.comparing(String::toString));
         assertTrue(pq.isEmpty());
     }
 
     @Test
     public void size() throws PQException {
-        PriorityQueue<String> pq = new PriorityQueue<>(10, false, Comparator.comparing(String::toString));
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(10, false, Comparator.comparing(String::toString));
         assertEquals(0, pq.size());
         pq.give("A");
         assertEquals(1, pq.size());
@@ -226,11 +234,13 @@ public class PriorityQueueTest {
 
     @Test
     public void doTake01() throws PQException {
-        String[] binHeap = new String[3];
+        String[] binHeap = new String[5];
         binHeap[0] = "A";
         binHeap[1] = "B";
         binHeap[2] = "C";
-        PriorityQueue<String> pq = new PriorityQueue<>(false, binHeap, 0, 3, Comparator.comparing(String::toString), false);
+        binHeap[3] = "D";
+        binHeap[4] = "E";
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(false, binHeap, 0, 5, Comparator.comparing(String::toString), false);
         pq.doTake(pq::snake);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
         assertEquals("B", tester.invokePrivate("peek", 0));
@@ -238,23 +248,27 @@ public class PriorityQueueTest {
 
     @Test
     public void doTake02() throws PQException {
-        String[] binHeap = new String[3];
+        String[] binHeap = new String[5];
         binHeap[0] = "C";
         binHeap[1] = "A";
         binHeap[2] = "B";
-        PriorityQueue<String> pq = new PriorityQueue<>(true, binHeap, 0, 3, Comparator.comparing(String::toString), false);
+        binHeap[3] = "D";
+        binHeap[4] = "E";
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(true, binHeap, 0, 5, Comparator.comparing(String::toString), false);
         pq.doTake(pq::sink);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
-        assertEquals("B", tester.invokePrivate("peek", 0));
+        assertEquals("E", tester.invokePrivate("peek", 0));
     }
 
     @Test
     public void doTake11() throws PQException {
-        String[] binHeap = new String[4];
+        String[] binHeap = new String[6];
         binHeap[1] = "A";
         binHeap[2] = "B";
         binHeap[3] = "C";
-        PriorityQueue<String> pq = new PriorityQueue<>(false, binHeap, 1, 3, Comparator.comparing(String::toString), false);
+        binHeap[4] = "D";
+        binHeap[5] = "E";
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(false, binHeap, 1, 5, Comparator.comparing(String::toString), false);
         pq.doTake(pq::snake);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
         assertEquals("B", tester.invokePrivate("peek", 1));
@@ -262,14 +276,16 @@ public class PriorityQueueTest {
 
     @Test
     public void doTake12() throws PQException {
-        String[] binHeap = new String[4];
+        String[] binHeap = new String[6];
         binHeap[1] = "C";
         binHeap[2] = "A";
         binHeap[3] = "B";
-        PriorityQueue<String> pq = new PriorityQueue<>(true, binHeap, 1, 3, Comparator.comparing(String::toString), false);
+        binHeap[4] = "D";
+        binHeap[5] = "E";
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(true, binHeap, 1, 5, Comparator.comparing(String::toString), false);
         pq.doTake(pq::sink);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
-        assertEquals("B", tester.invokePrivate("peek", 1));
+        assertEquals("E", tester.invokePrivate("peek", 1));
     }
 
     @Test
@@ -278,7 +294,7 @@ public class PriorityQueueTest {
         binHeap[0] = "C";
         binHeap[1] = "B";
         binHeap[2] = "D";
-        PriorityQueue<String> pq = new PriorityQueue<>(true, binHeap, 0, 3, Comparator.comparing(String::toString), false);
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(true, binHeap, 0, 3, Comparator.comparing(String::toString), false);
         assertEquals(3, pq.size());
         Iterator<String> iterator = pq.iterator();
         assertTrue(iterator.hasNext());
@@ -297,7 +313,7 @@ public class PriorityQueueTest {
         binHeap[1] = "C";
         binHeap[2] = "B";
         binHeap[3] = "D";
-        PriorityQueue<String> pq = new PriorityQueue<>(true, binHeap, 1, 3, Comparator.comparing(String::toString), false);
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(true, binHeap, 1, 3, Comparator.comparing(String::toString), false);
         assertEquals(3, pq.size());
         Iterator<String> iterator = pq.iterator();
         assertTrue(iterator.hasNext());
@@ -312,7 +328,7 @@ public class PriorityQueueTest {
 
     @Test
     public void testGetMax() {
-        Iterable<String> pq = new PriorityQueue<>(10, false, Comparator.comparing(String::toString));
+        Iterable<String> pq = new PriorityQueue4Ary<>(10, false, Comparator.comparing(String::toString));
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
         assertEquals(false, tester.invokePrivate("getMax"));
     }
@@ -324,7 +340,7 @@ public class PriorityQueueTest {
         binHeap[2] = "A";
         binHeap[3] = "C";
         binHeap[4] = "B";
-        PriorityQueue<String> pq = new PriorityQueue<>(true, binHeap, 1, 4, Comparator.comparing(String::toString), false);
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(true, binHeap, 1, 4, Comparator.comparing(String::toString), false);
         String takenValue = pq.take();
         assertEquals("D", takenValue); // Ensure the max-heap returns the largest element.
         assertEquals(3, pq.size()); // Ensure size is reduced after take.
@@ -337,7 +353,7 @@ public class PriorityQueueTest {
         binHeap[2] = "C";
         binHeap[3] = "B";
         binHeap[4] = "Z";
-        PriorityQueue<String> pq = new PriorityQueue<>(false, binHeap, 1, 4, Comparator.comparing(String::toString), false);
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(false, binHeap, 1, 4, Comparator.comparing(String::toString), false);
         String takenValue = pq.take();
         assertEquals("A", takenValue); // Ensure the min-heap returns the smallest element.
         assertEquals(3, pq.size()); // Ensure size is reduced after take.
@@ -345,7 +361,7 @@ public class PriorityQueueTest {
 
     @Test(expected = PQException.class)
     public void testTake6() throws PQException {
-        PriorityQueue<String> pq = new PriorityQueue<>(5, Comparator.comparing(String::toString));
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(5, Comparator.comparing(String::toString));
         pq.take(); // Attempting to take from an empty queue should throw PQException.
     }
 
@@ -354,7 +370,7 @@ public class PriorityQueueTest {
         Integer[] binHeap = new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
         List<Integer> list = Arrays.asList(binHeap);
         shuffle(list, new Random(1234567890L));
-        PriorityQueue<Integer> pq = new PriorityQueue<>(list, Integer::compare);
+        PriorityQueue4Ary<Integer> pq = new PriorityQueue4Ary<>(list, Integer::compare);
         assertEquals(Integer.valueOf(19), pq.take());
         assertEquals(Integer.valueOf(18), pq.take());
         assertEquals(Integer.valueOf(17), pq.take());
@@ -379,28 +395,34 @@ public class PriorityQueueTest {
 
     @Test
     public void testDoHeapifya() throws PQException {
-        String[] binHeap = new String[]{null, "C", "D", "A", "E", "B"};
+        String[] binHeap = new String[]{null, "C", "D", "G", "E", "B", "F", "A", "H"};
         boolean max = false;
-        PriorityQueue<String> pq = new PriorityQueue<>(max, binHeap, 1, 5, Comparator.comparing(String::toString), false);
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(max, binHeap, 1, 8, Comparator.comparing(String::toString), false);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
-        assertEquals(5, tester.invokePrivate("doHeapifyStandard", 2));
-        assertEquals(3, tester.invokePrivate("doHeapifyStandard", 1));
+        assertEquals(7, tester.invokePrivate("doHeapifyStandard", 2));
+        assertEquals(2, tester.invokePrivate("doHeapifyStandard", 1));
 
     }
 
     @Test
     public void testDoHeapifyb() throws PQException {
-        String[] binHeap = new String[]{"C", "D", "A", "E", "B"};
+        String[] binHeap = new String[]{"C", "D", "A", "E", "B", "F", "A", "H"};
         boolean max = false;
-        PriorityQueue<String> pq = new PriorityQueue<>(max, binHeap, 0, 5, Comparator.comparing(String::toString), false);
+        PriorityQueue4Ary<String> pq = new PriorityQueue4Ary<>(max, binHeap, 0, 8, Comparator.comparing(String::toString), false);
         final PrivateMethodTester tester = new PrivateMethodTester(pq);
-        assertEquals(4, tester.invokePrivate("doHeapifyStandard", 1));
-        assertEquals(2, tester.invokePrivate("doHeapifyStandard", 0));
+        assertEquals(6, tester.invokePrivate("doHeapifyStandard", 1));
+        assertEquals(1, tester.invokePrivate("doHeapifyStandard", 0));
 
     }
 
     @Test
     public void testBenchmark() throws PQException {
+
+        //call two benchmark test in one
+        PriorityQueueTest test = new PriorityQueueTest();
+        test.testBenchmark();
+        //
+
         Stopwatch watch = new Stopwatch();
 //        watch.lap();
         Random random = new Random();
@@ -411,11 +433,11 @@ public class PriorityQueueTest {
             for(int i = 0; i < 4095+size; i ++){
                 randomArray[i] = random.nextInt();
             }
-            PriorityQueue<Integer> basic = new PriorityQueue<>(4095,1,true, Comparator.comparing(Integer::intValue),false);
-            PriorityQueue<Integer> basic_f = new PriorityQueue<>(4095,1,true, Comparator.comparing(Integer::intValue),true);
+            PriorityQueue4Ary<Integer> basic = new PriorityQueue4Ary<>(4095,1,true, Comparator.comparing(Integer::intValue),false);
+            PriorityQueue4Ary<Integer> basic_f = new PriorityQueue4Ary<>(4095,1,true, Comparator.comparing(Integer::intValue),true);
             // warm up
             for(int j = 0; j < 10; j ++){
-                basic = new PriorityQueue<>(4095,1,true, Comparator.comparing(Integer::intValue),false);
+                basic = new PriorityQueue4Ary<>(4095,1,true, Comparator.comparing(Integer::intValue),false);
                 for(int i = 0; i < 4095; i ++){
                     basic.give(randomArray[i]);
                 }
@@ -428,7 +450,7 @@ public class PriorityQueueTest {
             }
 
             for(int j = 0; j < 10; j ++){
-                basic_f = new PriorityQueue<>(4095,1,true, Comparator.comparing(Integer::intValue),true);
+                basic_f = new PriorityQueue4Ary<>(4095,1,true, Comparator.comparing(Integer::intValue),true);
                 for(int i = 0; i < 4095+ size; i ++){
                     basic_f.give(randomArray[i]);
                 }
@@ -441,7 +463,7 @@ public class PriorityQueueTest {
             double repeat = 100;
             long totalTime = 0;
             for(int j = 0; j < repeat; j ++){
-                basic = new PriorityQueue<>(4095,1,true, Comparator.comparing(Integer::intValue),false);
+                basic = new PriorityQueue4Ary<>(4095,1,true, Comparator.comparing(Integer::intValue),false);
                 for(int i = 0; i < 4095; i ++){
                     basic.give(randomArray[i]);
                 }
@@ -454,12 +476,12 @@ public class PriorityQueueTest {
                 }
                 totalTime += watch.lap();
             }
-            System.out.println("inserting for " +size + " elements and delete for 4000 elements");
-            System.out.println("Basic binary heap: " + totalTime/repeat + "ms");
+            System.out.println("inserting 4-ary for " + size + " elements and delete for 4000 elements");
+            System.out.println("4-ary heap: " + totalTime/repeat + "ms");
 
             totalTime = 0;
             for(int j = 0; j < repeat; j ++){
-                basic_f = new PriorityQueue<>(4095,1,true, Comparator.comparing(Integer::intValue),true);
+                basic_f = new PriorityQueue4Ary<>(4095,1,true, Comparator.comparing(Integer::intValue),true);
                 watch.lap();
                 for(int i = 0; i < 4095+ size; i ++){
                     basic_f.give(randomArray[i]);
@@ -470,9 +492,7 @@ public class PriorityQueueTest {
                 totalTime += watch.lap();
             }
             //        System.out.println("inserting for " + 4095+"+"+16000 + " elements and delete for 4000 elements");
-            System.out.println("Basic binary heap with Floyd's trick: " + totalTime/repeat + "ms");
+            System.out.println("4-ary heap with Floyd's trick: " + totalTime/repeat + "ms");
         }
-
-
     }
 }

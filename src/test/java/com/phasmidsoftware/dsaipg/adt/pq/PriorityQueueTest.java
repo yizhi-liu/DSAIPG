@@ -414,7 +414,7 @@ public class PriorityQueueTest {
             PriorityQueue<Integer> basic = new PriorityQueue<>(4095,1,true, Comparator.comparing(Integer::intValue),false);
             PriorityQueue<Integer> basic_f = new PriorityQueue<>(4095,1,true, Comparator.comparing(Integer::intValue),true);
             // warm up
-            for(int j = 0; j < 10; j ++){
+            for(int j = 0; j < 100; j ++){
                 basic = new PriorityQueue<>(4095,1,true, Comparator.comparing(Integer::intValue),false);
                 for(int i = 0; i < 4095; i ++){
                     basic.give(randomArray[i]);
@@ -427,7 +427,7 @@ public class PriorityQueueTest {
                 }
             }
 
-            for(int j = 0; j < 10; j ++){
+            for(int j = 0; j < 100; j ++){
                 basic_f = new PriorityQueue<>(4095,1,true, Comparator.comparing(Integer::intValue),true);
                 for(int i = 0; i < 4095+ size; i ++){
                     basic_f.give(randomArray[i]);
@@ -438,10 +438,15 @@ public class PriorityQueueTest {
             }
             // warm up end
 
-            double repeat = 100;
+            double repeat = 10;
             long totalTime = 0;
+            System.out.println("inserting " +size + " elements and delete for 4000 elements");
+            System.out.print("Max spilled elements for each repetition: ");
             for(int j = 0; j < repeat; j ++){
                 basic = new PriorityQueue<>(4095,1,true, Comparator.comparing(Integer::intValue),false);
+                for(int i = 0; i < 4095+size; i ++){
+                    randomArray[i] = random.nextInt();
+                }
                 for(int i = 0; i < 4095; i ++){
                     basic.give(randomArray[i]);
                 }
@@ -453,11 +458,14 @@ public class PriorityQueueTest {
                     basic.take();
                 }
                 totalTime += watch.lap();
+                System.out.print( basic.getMaxSpilled()+ ", " );
             }
-            System.out.println("inserting for " +size + " elements and delete for 4000 elements");
+            System.out.println();
             System.out.println("Basic binary heap: " + totalTime/repeat + "ms");
+//            System.out.println("Max spilled elements: " + basic.getMaxSpilled());
 
             totalTime = 0;
+            System.out.print("Max spilled elements for each repetition: ");
             for(int j = 0; j < repeat; j ++){
                 basic_f = new PriorityQueue<>(4095,1,true, Comparator.comparing(Integer::intValue),true);
                 watch.lap();
@@ -468,9 +476,12 @@ public class PriorityQueueTest {
                     basic_f.take();
                 }
                 totalTime += watch.lap();
+                System.out.print( basic.getMaxSpilled()+ ", " );
             }
+            System.out.println();
             //        System.out.println("inserting for " + 4095+"+"+16000 + " elements and delete for 4000 elements");
             System.out.println("Basic binary heap with Floyd's trick: " + totalTime/repeat + "ms");
+            System.out.println();
         }
 
 

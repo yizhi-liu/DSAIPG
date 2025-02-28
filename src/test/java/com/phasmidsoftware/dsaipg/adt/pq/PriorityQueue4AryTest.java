@@ -460,8 +460,10 @@ public class PriorityQueue4AryTest {
             }
             // warm up end
 
-            double repeat = 100;
+            double repeat = 10;
             long totalTime = 0;
+            System.out.println("inserting 4-ary for " + size + " elements and delete for 4000 elements");
+            System.out.print("Max spilled elements for each repetition: ");
             for(int j = 0; j < repeat; j ++){
                 basic = new PriorityQueue4Ary<>(4095,1,true, Comparator.comparing(Integer::intValue),false);
                 for(int i = 0; i < 4095; i ++){
@@ -475,11 +477,14 @@ public class PriorityQueue4AryTest {
                     basic.take();
                 }
                 totalTime += watch.lap();
+                System.out.print( basic.getMaxSpilled()+ ", " );
+
             }
-            System.out.println("inserting 4-ary for " + size + " elements and delete for 4000 elements");
+            System.out.println();
             System.out.println("4-ary heap: " + totalTime/repeat + "ms");
 
             totalTime = 0;
+            System.out.print("Max spilled elements for each repetition: ");
             for(int j = 0; j < repeat; j ++){
                 basic_f = new PriorityQueue4Ary<>(4095,1,true, Comparator.comparing(Integer::intValue),true);
                 watch.lap();
@@ -490,9 +495,14 @@ public class PriorityQueue4AryTest {
                     basic_f.take();
                 }
                 totalTime += watch.lap();
+                System.out.print( basic.getMaxSpilled()+ ", " );
+
             }
             //        System.out.println("inserting for " + 4095+"+"+16000 + " elements and delete for 4000 elements");
+            System.out.println();
             System.out.println("4-ary heap with Floyd's trick: " + totalTime/repeat + "ms");
+            System.out.println();
+
         }
     }
 }

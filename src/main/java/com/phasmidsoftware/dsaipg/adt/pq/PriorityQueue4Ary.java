@@ -45,11 +45,22 @@ public class PriorityQueue4Ary<K> implements Iterable<K> {
      * @param key the element to be inserted into the priority queue
      */
     public void give(K key) {
-        if (m == binHeap.length - first) m--;
+        if (m == binHeap.length - first) {
+            spilled.add(binHeap[m + first -1]);
+            m--;
+        }
         binHeap[++m + first - 1] = key;
         swimUp(m + first - 1);
     }
 
+    public K getMaxSpilled() {
+        K max = (K) spilled.stream().min(comparator);
+        return max;
+    }
+
+    public void clearSpilled() {
+        spilled.clear();
+    }
     /**
      * Remove the root element from this Priority Queue and adjust the binary heap accordingly.
      * If max is true, then the result will be the maximum element, else the minimum element.
@@ -356,5 +367,6 @@ public class PriorityQueue4Ary<K> implements Iterable<K> {
      * When enabled, this optimization adjusts the binary heap to enhance performance in specific scenarios.
      */
     private final boolean floyd;
+    private ArrayList<K> spilled = new ArrayList<>();
 
 }

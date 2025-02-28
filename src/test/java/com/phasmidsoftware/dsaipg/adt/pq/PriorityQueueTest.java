@@ -468,15 +468,21 @@ public class PriorityQueueTest {
             System.out.print("Max spilled elements for each repetition: ");
             for(int j = 0; j < repeat; j ++){
                 basic_f = new PriorityQueue<>(4095,1,true, Comparator.comparing(Integer::intValue),true);
+                for(int i = 0; i < 4095+size; i ++){
+                    randomArray[i] = random.nextInt();
+                }
+                for(int i = 0; i < 4095; i ++){
+                    basic_f.give(randomArray[i]);
+                }
                 watch.lap();
-                for(int i = 0; i < 4095+ size; i ++){
+                for(int i = 4095; i < 4095+ size; i ++){
                     basic_f.give(randomArray[i]);
                 }
                 for(int i = 0; i < 4000; i ++){
                     basic_f.take();
                 }
                 totalTime += watch.lap();
-                System.out.print( basic.getMaxSpilled()+ ", " );
+                System.out.print( basic_f.getMaxSpilled()+ ", " );
             }
             System.out.println();
             //        System.out.println("inserting for " + 4095+"+"+16000 + " elements and delete for 4000 elements");

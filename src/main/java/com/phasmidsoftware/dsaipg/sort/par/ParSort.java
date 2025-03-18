@@ -6,6 +6,7 @@ package com.phasmidsoftware.dsaipg.sort.par;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * ParSort is a class implementing a parallel sorting algorithm.
@@ -42,7 +43,14 @@ final class ParSort {
         if (to - from >= cutoff) {
             CompletableFuture<int[]> completableFuture1 = null;
             CompletableFuture<int[]> completableFuture2 = null;
-            // TO BE IMPLEMENTED 
+            // TO BE IMPLEMENTED
+            int threads = ForkJoinPool.getCommonPoolParallelism();
+            ForkJoinPool myPool = new ForkJoinPool(threads);
+
+            completableFuture1 =  ParSort.asyncSort(array,from,(to-from)/2+from,myPool);
+            completableFuture2 =  ParSort.asyncSort(array,(to-from)/2+from,to,myPool);
+
+
             // END SOLUTION
             CompletableFuture<int[]> completableFuture = completableFuture1.thenCombine(completableFuture2, ParSort::doMerge);
             completableFuture.whenComplete((result, throwable) -> System.arraycopy(result, 0, array, from, result.length));
@@ -63,8 +71,16 @@ final class ParSort {
      */
     static int[] sortRecursive(int[] array, int from, int to) {
         int[] result = new int[to - from];
-        // TO BE IMPLEMENTED 
-         // NOTE you need to do something here so that result is the sorted version of array.
+        // TO BE IMPLEMENTED
+        // NOTE you need to do something here so that result is the sorted version of array.
+        if (to - from <= 1) {
+            result = new int[]{array[from]};
+            return result;
+        }
+        int mid = (from + to) / 2;
+        int[] left = sortRecursive(array, from, mid);
+        int[] right = sortRecursive(array, mid, to);
+        result = doMerge(left, right);
         // END SOLUTION
         return result;
     }
@@ -96,14 +112,16 @@ final class ParSort {
      * This method extracts a subsection of the given array, sorts it, and returns a CompletableFuture
      * containing the sorted portion of the array.
      *
-     * @param array the input array to extract and sort
-     * @param from  the starting index (inclusive) of the portion of the array to be sorted
-     * @param to    the ending index (exclusive) of the portion of the array to be sorted
+     * @param array  the input array to extract and sort
+     * @param from   the starting index (inclusive) of the portion of the array to be sorted
+     * @param to     the ending index (exclusive) of the portion of the array to be sorted
+     * @param myPool
      * @return a CompletableFuture containing the sorted section of the array
      */
-    static CompletableFuture<int[]> asyncSort(int[] array, int from, int to) {
+    static CompletableFuture<int[]> asyncSort(int[] array, int from, int to, ForkJoinPool myPool) {
         return CompletableFuture.supplyAsync(
-                () -> sortRecursive(array, from, to)
+                () -> sortRecursive(array, from, to),
+                myPool
         );
     }
 }
